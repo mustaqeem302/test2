@@ -1,0 +1,26 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  deploy:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - checkout
+      - run: echo "Deploying application..."
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
